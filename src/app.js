@@ -207,7 +207,7 @@ function showComplete() {
   ui.fill.style.setProperty('--progress', '100%');
   document.querySelector('.progress-track').setAttribute('aria-valuenow', String(levels.length));
   ui.title.textContent = 'The page was the answer.';
-  ui.copy.replaceChildren(paragraph('Fifty entries, one growing tool kit: questions became records, records became code, and code resolved into this chain. You followed the links in the data, then used the address for the final operation. The evidence was in the document all along.'));
+  ui.copy.replaceChildren(paragraph('One hundred entries, one growing tool kit. You learned to read the parts of a page that usually go unnoticed, then used those rules to follow the document to its final answer.'));
   ui.slot.innerHTML = '<div class="complete-mark" aria-hidden="true">✓</div>';
   ui.form.hidden = true;
   ui.feedback.textContent = 'Run complete.';

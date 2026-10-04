@@ -371,6 +371,67 @@ export const levels = [
   }
 ];
 
+// The note for each entry is duplicated in index.html as an HTML source comment.
+const sourceChallenges = [
+  ['Decimal bytes', '83 79 85 82 67 69', 'Read the values as decimal ASCII bytes.', 'SOURCE', '83 79 85 82 67 69 decode to SOURCE.', 'ASCII values are decimal, not hex.'],
+  ['Backwards buffer', 'ETON', 'Reverse the four characters.', 'NOTE', 'The buffer is read from its final character to its first.', 'The source note names a direction.'],
+  ['Hex dump', '43 4F 44 45', 'Read each pair as a hexadecimal ASCII byte.', 'CODE', 'Hexadecimal bytes 43 4F 44 45 spell CODE.', 'Each pair is one byte.'],
+  ['The skipped records', '[{i:0,c:"X"},{i:1,c:"A"},{i:2,c:"X"},{i:3,c:"R"},{i:4,c:"X"},{i:5,c:"E"},{i:6,c:"X"},{i:7,c:"A"},{i:8,c:"X"},{i:9,c:"D"}]', 'Keep odd indexes, then concatenate c.', 'AREAD', 'Odd indexes 1,3,5,7,9 spell AREAD.', 'Indexing starts at zero.'],
+  ['A stable queue', '[{p:2,c:"R"},{p:1,c:"E"},{p:2,c:"A"},{p:1,c:"D"}]', 'Sort by p ascending; preserve input order for ties.', 'EDRA', 'Stable sort gives E,D,R,A.', 'Equal priorities retain their input order.'],
+  ['The pointer', '{"a":{"b":[{"c":"TRACE"}]}}', 'Follow JSON Pointer /a/b/0/c.', 'TRACE', 'The pointer resolves to the c field of array item zero.', 'Slash-separated keys lead the way.'],
+  ['Capture only', 'rack-07/bin-42', 'Capture digits after rack- and bin-; concatenate while retaining zeroes.', '0742', 'The captures are 07 and 42.', 'Parentheses in a regex can capture substrings.'],
+  ['Specificity tuple', 'element=<main><div id=cabinet class=cabinet>; #cabinet=blue; main #cabinet=red; .cabinet.cabinet=green', 'Compare matching selectors by (IDs, classes, elements). Return the winning color.', 'red', 'main #cabinet has one ID, one class, and one element; it wins.', 'Compare tuple components from left to right.'],
+  ['Child nodes', 'index:text A | 1:space | 2:text B | 3:comment | 4:text C', 'Treat spaces and comments as childNodes. Take even zero-based indexes.', 'ABC', 'Indexes 0,2,4 yield A,B,C.', 'This is childNodes, not children.'],
+  ['Signed byte', '11110110', 'Interpret as an 8-bit signed two’s-complement integer.', '-10', 'Invert and add one to find magnitude 10; sign is negative.', 'The width is exactly eight bits.'],
+  ['Decode twice', '%2Froom%252F7%3Fq%3Done', 'Percent-decode exactly twice.', '/room/7?q=one', 'One pass leaves %2F; the second decodes the slash.', 'Do not stop after the first decoding pass.'],
+  ['Zero specificity', ':where(#desk) .tag=amber; #desk .tag=cobalt', 'Remember :where() adds zero specificity. Return the winning color.', 'cobalt', 'The second selector carries an ID and a class.', 'The ID inside :where() does not count.'],
+  ['The odd positions', 'xSxOxU', 'Take indexes 1,3,5 using zero-based indexing.', 'SOU', 'The selected characters are S,O,U.', 'Index zero is x.'],
+  ['A remainder', 'bytes=[83,79,85,82,67,69]; divisor=7', 'Sum the bytes, then take remainder modulo 7.', '3', 'The sum is 465; 465 mod 7 is 3.', 'Do not take each byte modulo seven separately.'],
+  ['Short circuit', '"" || 0 || null || "TRACE" || "END"', 'Evaluate JavaScript logical OR and return its value.', 'TRACE', 'The first truthy operand is TRACE.', 'OR returns an operand, not necessarily true.'],
+  ['Reducer state', '[3,1,4,1,5]', 'Fold left from zero with accumulator = accumulator*10 + item.', '31415', 'Each step appends a digit numerically.', 'The accumulator starts at zero.'],
+  ['CSS counter', 'start=0; increment=2; items=4', 'The third displayed counter value is requested; count each item once.', '6', 'Displayed values are 2,4,6,8.', 'The first increment happens before display.'],
+  ['Sparse map', '["M", <hole>, "P", undefined, "A"]', 'Map replaces undefined with underscore, skips holes; then join with empty separator.', 'MP_A', 'The hole is skipped; explicit undefined becomes underscore.', 'A hole is not visited by map.'],
+  ['Prefix sum', 'first=4; deltas=[3,-1,5,-2]', 'Add each delta to the previous result. Convert each running value using A=1.', 'DGFKI', 'Running values 4,7,6,11,9 map to D,G,F,K,I.', 'The deltas are cumulative.'],
+  ['Fragment coordinates', '#row-4-col-2', 'Ignore everything before #. Convert row then column as A=1, B=2, and so on.', 'DB', '4 maps to D and 2 to B.', 'The fragment begins at the hash.'],
+  ['XOR bytes', 'data=[27,28,13,8,27]; key=91', 'XOR each byte with key and decode the result as ASCII.', 'THEAT', 'The decoded bytes are THEAT.', 'Apply the same key separately to every byte.'],
+  ['Stack output', 'push S,T,A,C,K; then pop until empty', 'A stack is last in, first out. Concatenate pop results.', 'KCATS', 'Pops return K,C,A,T,S.', 'Start from the last pushed value.'],
+  ['Regex replacement', 'ab-12 cd-34', 'Globally replace letters-digits with digits-letters; keep the space.', '12ab 34cd', 'Each pair swaps its two captured groups.', 'There are two matches.'],
+  ['Inherited value', 'parent color=slate; child initial; child inherit', 'Resolve declarations in order; report the final computed child color.', 'slate', 'The final inherit takes the parent’s computed value.', 'The last declaration wins before inheritance is resolved.'],
+  ['UTF-8 signature', 'EF BB BF 4F 4B', 'Ignore the UTF-8 signature, decode the remaining bytes as ASCII.', 'OK', '4F 4B spells OK.', 'The first three bytes are a signature.'],
+  ['Exclusive end', 'Array.from({length:8},(_,i)=>i).slice(2,6).reverse()', 'Evaluate slice with exclusive end, then read the result.', '5,4,3,2', 'Indexes 2 through 5 are selected, then reversed.', 'Index 6 is excluded.'],
+  ['Two entity passes', '&amp;lt;tag&amp;gt;', 'Decode HTML entities once per pass, for two passes.', '<tag>', 'Two decodes reveal the angle brackets.', 'One pass leaves &lt;tag&gt;.'],
+  ['SVG line points', 'M2,2 L8,2 L8,5 L4,5 Z', 'Ignore M and Z. For each L pair, convert x then y using A=1; concatenate.', 'HBHE', 'Pairs give H,B then H,E.', 'Read both coordinates at each L.'],
+  ['Weighted checksum', 'text=SOURCE; weights=1,2,3,4,5,6', 'Multiply each ASCII code by its one-based position, sum, report the last digit.', '3', 'The weighted sum is 1573, whose last digit is 3.', 'Use ASCII codes rather than alphabet indexes.'],
+  ['Selector list', '#a, .b matches; .c #d does not', 'Only matching selectors count. Return the x value from the winning declaration: #a,.b {x:1}; .c #d {x:2}.', '1', 'The second selector does not match this element.', 'A comma separates alternative selectors.'],
+  ['Generator return', 'yield 2; yield 5; return 9; then spread', 'Spread collects yielded values but not the return value.', '2,5', 'Only 2 and 5 are yielded.', 'Return is not yield.'],
+  ['UTF-8 character', 'C3 A9', 'Decode as one UTF-8 character; answer its common English name.', 'E ACUTE', 'These bytes encode é, Latin small letter e with acute.', 'It is one Unicode character, not two ASCII letters.'],
+  ['Closure memory', 'make n=1; return ++n; call same function 3 times', 'Calls share the closed-over n. Add all three returned values.', '9', 'The calls return 2,3,4; sum is 9.', 'The closure is created once.'],
+  ['Map overwrite', 'set x=2; set y=4; set x=7; read values', 'Replacing an existing Map key changes its value but keeps its insertion position.', '74', 'Values iterate as 7 then 4.', 'There are still only two keys.'],
+  ['The :is() rule', ':is(#x,.y) specificity; #x.y specificity', 'For :is(), use its most specific argument. Compare both matching rules; return winner.', 'second', 'Both have one ID; the second also has a class.', 'Compare remaining specificity after IDs.'],
+  ['Factorial remainder', '5! mod 13', 'Compute factorial, then take remainder modulo 13.', '3', '120 divided by 13 leaves remainder 3.', '5! is 120.'],
+  ['Little endian', '02 01 00 00', 'Interpret four bytes as unsigned little-endian 32-bit integer; give decimal.', '258', '2 + 1×256 = 258.', 'The first byte is least significant.'],
+  ['Text walk', 'text A; <b>text B; comment x</b>; text C', 'Walk descendant text nodes depth-first in document order; ignore comments.', 'ABC', 'Text nodes are A, then B, then C.', 'Element boundaries do not reorder text.'],
+  ['JavaScript remainder', '-17 % 5', 'Use JavaScript remainder semantics; the sign follows the dividend.', '-2', 'JavaScript evaluates this remainder as -2.', 'Do not normalize to a positive modulo.'],
+  ['One digit per match', 'ab12cd34; /([a-z]+)(\\d)/g capture group 2', 'Collect capture group 2 from each global match.', '13', 'Matches consume ab1 and cd3.', 'The pattern asks for one digit, not all digits.'],
+  ['Numeric source map', 'keys: 0:0→a.js; 0:1→b.js; 1:0→a.js', 'Sort keys numerically by line then column; take each filename initial.', 'aba', 'Numeric order yields a,b,a.', 'Do not sort the keys as plain strings.'],
+  ['XOR fold', '[12,5,9,12]', 'XOR-fold from zero, left to right.', '12', '12 XOR 5 XOR 9 XOR 12 = 12.', 'XOR is associative; 5 XOR 9 is 12.'],
+  ['Nested microtask', 'sync 1,5; queued microtasks 2,3; task queued by 2 logs 4', 'Finish synchronous calls, then drain microtasks in queue order, including newly queued work.', '15234', '1 and 5 run first, then 2,3, then nested 4.', 'The nested callback joins the queue tail.'],
+  ['Stack machine', 'PUSH 6; PUSH 4; SUB; PUSH 3; MUL; EMIT', 'SUB pops b then a and pushes a-b; MUL uses a*b.', '6', '6-4=2, then 2×3=6.', 'Operand order matters for SUB.'],
+  ['Follow the references', 'r→a:1; a→b:2; b→c:3; c→null:4', 'Start at r, follow each reference, collect the number; convert A=1.', 'ABCD', 'The chain numbers are 1,2,3,4.', 'Do not sort the records.'],
+  ['Seven-bit frames', '1000001 1000010 1000011', 'Decode each seven-bit binary value as ASCII.', 'ABC', 'The values 65,66,67 spell ABC.', 'These frames omit the parity bit.'],
+  ['Chunk transform', 'chunks=["SOU","RCE"]; order=[1,0]; transform=reverse', 'Reorder chunks, concatenate, then reverse the complete string.', 'UOSEC R'.replaceAll(' ', ''), 'Order gives RCESOU; reversing yields UOSEC R without a space: UOSECR.', 'Reverse after concatenating, not per chunk.'],
+  ['Expression tree', 'root=+(7, *(3,4))', 'Evaluate the referenced expression tree with normal arithmetic.', '19', '7 + (3×4) = 19.', 'Resolve the child multiplication first.'],
+  ['The first five', 'answers=[WHAT,RIGHT,MARGIN,16,DRAWER]', 'Take the length of each answer and concatenate the numbers.', '45626', 'Lengths are 4,5,6,2,6.', 'Count letters, not punctuation or quotes.'],
+  ['The document walk', 'open→o→c→u→m→e→n→t; suffix=!; order=reverse', 'Follow references collecting text, append suffix, then reverse all characters including punctuation.', '!TNEMUCOD', 'The chain spells DOCUMENT; append ! and reverse to !TNEMUCOD.', 'The punctuation participates in the last operation.']
+].map(([title, artifact, sourceNote, answer, solution, hint]) => ({ title, artifact, sourceNote, answer, solution, hint }));
+
+for (const [index, challenge] of sourceChallenges.entries()) {
+  const id = index + 51;
+  levels.push({ id, title: challenge.title, difficulty: id < 61 ? 'Inspect the source' : id < 76 ? 'Source and structure' : id < 91 ? 'Several rules at once' : 'The source is part of the puzzle', kind: 'answer', sourceMarker: id,
+    paragraphs: [`Open View Page Source and find ENTRY ${id} SOURCE. Apply its note to the artifact below. The note is part of this puzzle.`],
+    code: challenge.artifact, sourceNote: challenge.sourceNote, answers: [challenge.answer], hints: [`The clue is in the source comment marked ENTRY ${id} SOURCE.`, challenge.hint, 'Trace the rule one operation at a time.'], solution: challenge.solution });
+}
+
 export function validateLevels(items) {
   const problems = [];
   if (!Array.isArray(items) || items.length === 0) return ['At least one level is required.'];

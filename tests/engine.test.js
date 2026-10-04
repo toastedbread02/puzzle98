@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import { levels, validateLevels } from '../src/levels.js';
 import { completeLevel, freshProgress, isCorrect, loadProgress, normalizeAnswer, revealNextHint, saveProgress, STORAGE_KEY } from '../src/engine.js';
 
@@ -10,9 +11,18 @@ function memoryStorage() {
 
 test('all authored levels load with valid, consecutive metadata', () => {
   assert.deepEqual(validateLevels(levels), []);
-  assert.equal(levels.length, 50);
-  assert.deepEqual(levels.map(level => level.id), Array.from({ length: 50 }, (_, index) => index + 1));
+  assert.equal(levels.length, 100);
+  assert.deepEqual(levels.map(level => level.id), Array.from({ length: 100 }, (_, index) => index + 1));
   assert.ok(levels.every(level => level.paragraphs.length > 0 && level.hints.length >= 2 && level.solution));
+});
+
+test('entries 51–100 each point to one matching source clue', async () => {
+  const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
+  for (const level of levels.filter(item => item.id > 50)) {
+    assert.equal(level.sourceMarker, level.id);
+    const marker = `<!-- ENTRY ${level.id} SOURCE: ${level.sourceNote} -->`;
+    assert.equal(html.split(marker).length - 1, 1, `entry ${level.id} has one source note`);
+  }
 });
 
 test('malformed puzzle data is reported', () => {
@@ -38,14 +48,14 @@ test('progression records completion and advances one level', () => {
   assert.deepEqual(next.completed, [1]);
 });
 
-test('the complete fifty-entry run advances sequentially to its ending', () => {
+test('the complete one-hundred-entry run advances sequentially to its ending', () => {
   let state = freshProgress();
   for (const [index, level] of levels.entries()) {
     state = completeLevel(state, level, levels.at(-1).id);
     assert.equal(state.current, Math.min(index + 2, levels.length));
   }
-  assert.equal(state.completed.length, 50);
-  assert.ok(state.completed.includes(50));
+  assert.equal(state.completed.length, 100);
+  assert.ok(state.completed.includes(100));
 });
 
 test('progress and hint counts persist; malformed saves reset cleanly', () => {
