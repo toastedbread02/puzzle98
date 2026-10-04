@@ -66,6 +66,19 @@ h1 { grid-column: 2; grid-row: 1; margin: 1px -4px 20px 0; padding: 7px 10px 8px
 .puzzle-copy strong { color: #000080; font-weight: bold; }
 .puzzle-copy .poem { white-space: pre-line; margin: 16px 0 23px -9px; padding: 9px 10px 9px 13px; border-left: 4px double #d00000; border-top: 1px dashed #999999; border-bottom: 1px dashed #999999; color: #171717; background: #f7f4dc; font: 15px/1.8 'Times New Roman', Times, serif; letter-spacing: .025em; }
 .puzzle-copy code, .puzzle-copy .code-line { display: block; width: fit-content; max-width: 100%; margin: 13px 0 21px; padding: 7px 9px; border: 2px outset #dddddd; color: #006000; background: #d8ffd8; font: bold 12px/1.8 'Courier New', monospace; overflow-wrap: anywhere; }
+.puzzle-copy .code-block { max-width: 100%; margin: 14px 0 20px -5px; padding: 10px 12px; overflow-x: auto; border: 3px ridge #bdbdbd; color: #003d00; background: #e6ffe6; white-space: pre-wrap; overflow-wrap: anywhere; font: 12px/1.55 'Courier New', monospace; }
+.puzzle-copy .json-artifact { background: #fffce0; color: #151515; border-color: #c8bd72; }
+.letter-grid { margin: 13px 0 19px; border-collapse: collapse; border: 2px ridge #999999; background: #fffde7; font: bold 18px/1 'Courier New', monospace; }
+.letter-grid td { width: 37px; height: 34px; padding: 5px; border: 1px solid #999999; text-align: center; }
+.inspect-sample { width: fit-content; min-width: 120px; margin: 13px 0 20px; padding: 12px; border: 2px dashed #a00000; color: #000080; background: #ffffc8; font: bold 14px 'Courier New', monospace; text-align: center; }
+.tile-row { display: flex; flex-wrap: nowrap; gap: 6px; width: fit-content; max-width: 100%; margin: 12px 0 21px; }
+.order-tile { min-width: 37px; padding: 8px 10px; border: 3px outset #dddddd; color: #000080; background: #eeeeee; font: bold 15px 'Courier New', monospace; text-align: center; }
+.waveform-frame { max-width: 100%; margin: 14px 0 22px -6px; padding: 8px 7px 5px; overflow-x: auto; border: 2px inset #bdbdbd; background: #ffffff; }
+.waveform-svg { display: block; max-width: none; }
+.waveform-svg text { font: 9px 'Courier New', monospace; fill: #111111; }
+.waveform-frame figcaption { padding-top: 3px; color: #555555; font: 10px 'Courier New', monospace; }
+.vector-artifact { display: block; width: 330px; max-width: 100%; height: auto; margin: 12px 0 20px; padding: 6px; border: 2px groove #cccccc; background: #fffde5; }
+.vector-artifact text { fill: #000080; font: bold 7px 'Courier New', monospace; }
 .puzzle-copy .sequence { display: block; width: fit-content; margin: 12px 0 22px -7px; padding: 3px 8px; border: 1px solid #999999; color: #b00000; background: #e8e8e8; font: bold 15px/2 'Courier New', monospace; letter-spacing: .1em; }
 .seal { width: 62px; height: 76px; margin: 1px 0 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; border: 3px ridge #cccccc; background: #ffffd7; }
 .seal svg { width: 44px; height: 44px; }

@@ -10,7 +10,9 @@ function memoryStorage() {
 
 test('all authored levels load with valid, consecutive metadata', () => {
   assert.deepEqual(validateLevels(levels), []);
-  assert.equal(levels.length, 10);
+  assert.equal(levels.length, 50);
+  assert.deepEqual(levels.map(level => level.id), Array.from({ length: 50 }, (_, index) => index + 1));
+  assert.ok(levels.every(level => level.paragraphs.length > 0 && level.hints.length >= 2 && level.solution));
 });
 
 test('malformed puzzle data is reported', () => {
@@ -22,6 +24,12 @@ test('answer validation trims, normalizes case and spacing', () => {
   assert.equal(isCorrect(levels[0], ' WHAT '), true);
   assert.equal(isCorrect(levels[0], 'where'), false);
   assert.equal(isCorrect(levels[8], 'period'), false);
+});
+
+test('every authored answer is accepted by its level validator', () => {
+  for (const level of levels.filter(item => item.kind === 'answer')) {
+    for (const answer of level.answers) assert.equal(isCorrect(level, answer), true, `level ${level.id} should accept ${answer}`);
+  }
 });
 
 test('progression records completion and advances one level', () => {
@@ -51,4 +59,27 @@ test('hint use is capped at the number of available hints', () => {
 test('all referenced visual content is self-contained and needs no missing asset', () => {
   assert.equal(levels.filter(level => level.visual).every(level => level.visual === 'reverse'), true);
   assert.equal(levels.some(level => level.image || level.audio), false);
+});
+
+test('the later run uses real data, code, inspection, SVG, and waveform artifacts', () => {
+  assert.ok(levels.some(level => level.json));
+  assert.ok(levels.some(level => level.code));
+  assert.ok(levels.some(level => level.inspector));
+  assert.ok(levels.some(level => level.vector));
+  const waveformTypes = new Set(levels.filter(level => level.waveform).map(level => level.waveform.type));
+  assert.deepEqual([...waveformTypes].sort(), ['bits', 'manchester', 'morse', 'runs']);
+});
+
+test('waveform frames have valid signal data and complete groups', () => {
+  for (const { waveform } of levels.filter(level => level.waveform)) {
+    if (waveform.type === 'bits' || waveform.type === 'manchester') {
+      const bits = waveform.bits.replace(/\s/g, '');
+      assert.match(bits, /^[01]+$/);
+      assert.equal(bits.length % waveform.group, 0);
+    }
+    if (waveform.type === 'runs') assert.ok(waveform.runs.every(run => Number.isInteger(run) && run > 0));
+    if (waveform.type === 'morse') assert.match(waveform.code, /^[.-]+( [.-]+)*$/);
+  }
+  const parityFrames = levels.find(level => level.id === 36).waveform.bits.split(/\s+/);
+  assert.ok(parityFrames.every(frame => frame.replaceAll('0', '').length % 2 === 0));
 });
