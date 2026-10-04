@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#111311">
+    <meta name="description" content="A sequence of small internet puzzles. Look carefully.">
+    <title>The Margin — a sequence of small puzzles</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>window.__PUZZLE_DEV__ = false;</script>
+    <script type="module" src="src/app.js"></script>
+  </head>
+  <body>
+    <main class="site-shell">
+      <header class="masthead">
+        <a class="wordmark" href="./" aria-label="The Margin, home">the margin<span>·</span></a>
+        <div class="masthead-right">A web riddle in ten entries</div>
+      </header>
+      <section class="game" aria-live="polite" aria-atomic="false">
+        <div class="level-topline"><span id="level-kicker">ENTRY 01</span><span id="difficulty">A small beginning</span></div>
+        <div class="progress-track" role="progressbar" aria-label="Puzzle progress" aria-valuemin="0" aria-valuemax="10" aria-valuenow="1"><div id="progress-fill"></div></div>
+        <h1 id="level-title">Loading</h1>
+        <div id="puzzle-copy" class="puzzle-copy"></div>
+        <div id="interaction-slot"></div>
+        <form id="answer-form" class="answer-form" autocomplete="off">
+          <label class="visually-hidden" for="answer-input">Your answer</label>
+          <input id="answer-input" name="answer" type="text" placeholder="type your answer" spellcheck="false" autocapitalize="off" aria-describedby="feedback">
+          <button type="submit">enter <span aria-hidden="true">↵</span></button>
+        </form>
+        <p id="feedback" class="feedback" role="status" aria-live="polite"></p>
+        <div class="tools-row">
+          <button id="hint-button" class="text-button" type="button">Need a nudge?</button>
+          <button id="reset-button" class="text-button subdued" type="button">reset progress</button>
+        </div>
+        <div id="hint-panel" class="hint-panel" hidden></div>
+        <div id="debug-panel" class="debug-panel" hidden></div>
+      </section>
+      <footer><span>Look at the page. Then look around it.</span><span id="save-indicator">progress stays in this browser</span></footer>
+    </main>
+  </body>
+</html>
