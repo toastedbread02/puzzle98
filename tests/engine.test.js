@@ -38,6 +38,16 @@ test('progression records completion and advances one level', () => {
   assert.deepEqual(next.completed, [1]);
 });
 
+test('the complete fifty-entry run advances sequentially to its ending', () => {
+  let state = freshProgress();
+  for (const [index, level] of levels.entries()) {
+    state = completeLevel(state, level, levels.at(-1).id);
+    assert.equal(state.current, Math.min(index + 2, levels.length));
+  }
+  assert.equal(state.completed.length, 50);
+  assert.ok(state.completed.includes(50));
+});
+
 test('progress and hint counts persist; malformed saves reset cleanly', () => {
   const storage = memoryStorage();
   let state = revealNextHint(freshProgress(), levels[0]);
