@@ -89,7 +89,7 @@ export const levels = [
   {
     id: 12, title: 'Trace the pipeline', difficulty: 'Read the code literally', kind: 'answer',
     paragraphs: ['Do not run this snippet. Follow each operation from left to right and write the final output.'],
-    code: 'const rows = [\n  { n: 1, ch: "X" }, { n: 2, ch: "C" },\n  { n: 3, ch: "R" }, { n: 4, ch: "O" },\n  { n: 5, ch: "D" }, { n: 6, ch: "E" }\n];\nrows.filter(r => r.n % 2 === 0)\n    .map(r => r.ch).join("");',
+    code: 'const rows = [\n  { n: 1, ch: "X" }, { n: 2, ch: "C" },\n  { n: 3, ch: "R" }, { n: 4, ch: "O" },\n  { n: 5, ch: "D" }, { n: 6, ch: "E" }\n];\nrows.filter(r => (r.n % 2 === 0) || r.n === 5)\n    .map(r => r.ch).join("");',
     answers: ['code'], hints: ['The filter keeps even n values.', 'Map keeps only ch, then join adds no separators.'],
     solution: 'Even n values are 2, 4, 6. Their ch values join to CODE.'
   },
