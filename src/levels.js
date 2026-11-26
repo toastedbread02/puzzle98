@@ -291,7 +291,7 @@ export const levels = [
     query: { edge: 'last', order: 'reverse' },
     paragraphs: ['Use the address first. Read the named edge of each line from top to bottom, then apply the second address value.'],
     poem: 'Marks disappear into the haze.\nA narrow line vibrates like music.\nThe signal begins as a slow echo.\nThere is more here to read.',
-    answers: ['code'],
+    answers: ['doce'],
     hints: ['The last letters spell E C O D.', 'The URL says order=reverse.'],
     solution: 'edge=last yields ECOD; order=reverse makes it CODE.'
   },
